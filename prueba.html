@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsplash API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 20px;
+        }
+
+        .photo {
+            margin: 10px;
+        }
+
+        .photo img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Unsplash API Test</h1>
+    <div id="gallery"></div>
+
+    <script>
+        const accessKey = 'a6iPyz7wlTXV50F_eGAVf3IIK2ESFBYVlJdveVS1igc'; // Reemplaza con tu propia clave de API
+
+        const obtenerImagenes = async (query) => {
+            try {
+                const response = await fetch(`https://api.unsplash.com/photos/random?query=${query}&count=10&client_id=${accessKey}`);
+                const data = await response.json();
+
+                if (data && Array.isArray(data) && data.length > 0) {
+                    mostrarImagenes(data);
+                } else {
+                    console.error('No se encontraron imágenes.');
+                }
+            } catch (error) {
+                console.error('Error al obtener imágenes:', error);
+            }
+        };
+
+        const mostrarImagenes = (imagenes) => {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+
+            imagenes.forEach(imagen => {
+                const photoElement = document.createElement('div');
+                photoElement.classList.add('photo');
+
+                const imgElement = document.createElement('img');
+                imgElement.src = imagen.urls.regular;
+                imgElement.alt = imagen.alt_description;
+
+                photoElement.appendChild(imgElement);
+                gallery.appendChild(photoElement);
+            });
+        };
+
+        // Llamar a la función para obtener imágenes relacionadas con "city" (puedes cambiar esto)
+        obtenerImagenes('city');
+    </script>
+</body>
+</html>
